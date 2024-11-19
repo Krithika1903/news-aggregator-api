@@ -18,9 +18,14 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'phone',
         'email',
+        'user_role',
         'password',
+        'is_active'
+        
     ];
 
     /**
@@ -42,4 +47,31 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public static function getFirstUser($condition) {
+        return self::where($condition)->first();
+    }
+
+    public static function adduser($data) {
+        $data = self::Create($data);
+        return $data->id;
+    }
+
+    public static function checkExists($condition) {
+        return self::where($condition)->first();
+    }
+
+    public static function getLoggedUserData($loginUsername, $isActive) {
+        return self::select('id', 'first_name', 'last_name', 'email', 'phone','user_role','password')
+        ->where(function ($query) use ($loginUsername) {
+            $query->where('email', $loginUsername)
+                ->orWhere('phone', $loginUsername);
+        })
+        ->where('is_active', $isActive)
+        ->first();
+    }
+
+    public static function updateUser($id, $data) {
+        self::where('id', $id)->update($data);
+    }
 }
