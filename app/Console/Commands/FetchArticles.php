@@ -43,7 +43,7 @@ class FetchArticles extends Command
                             ?? $articleData['abstract'] 
                             ?? '',
                         'source' => $source,
-                        'url' => $articleData['url'] ?? $articleData['webUrl'] ?? '',
+                        'url' => $articleData['urlToImage'] ?? $articleData['web_url'] ?? $articleData['webUrl'] ?? '',
                     ],
                     [
                         'description' => $articleData['description'] 
