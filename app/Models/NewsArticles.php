@@ -63,4 +63,29 @@ class NewsArticles extends Model
     public static function getFirstData($condition) {
         return self::where($condition)->first();
     }
+
+    // Function to fetch personalized news feed based on categories and sources
+    public static function getNewsFeed($categories, $sources,$authors) {
+        return self::query()
+            ->when($categories->isNotEmpty(), function ($query) use ($categories) {
+                $query->whereIn('category', $categories); // Filter by preferred categories
+            })
+            ->when($sources->isNotEmpty(), function ($query) use ($sources) {
+                $query->whereIn('source', $sources); // Filter by preferred sources
+            })
+            ->when($authors->isNotEmpty(), function ($query) use ($authors) {
+                $query->whereIn('author', $authors); // Filter by preferred authors
+            })
+            ->paginate(10);
+    }
+
+    public static function getData() {
+        return self::select('author')
+            ->whereNotNull('author') // Exclude null authors
+            ->where('author', '!=', '') // Exclude empty strings
+            ->distinct() // Ensure unique authors
+            ->paginate(10); // Paginate with a limit of 100
+    }
+    
+
 }

@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
 require __DIR__.'/article.php';
+require __DIR__.'/preferences.php';

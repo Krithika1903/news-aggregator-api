@@ -1,42 +1,39 @@
-version: '3.8'
-
 services:
-  # Web server container
-  app:
+  laravel-app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: laravel-app
     ports:
       - "8000:80"
-    volumes:
-      - .:/var/www
     networks:
       - laravel_network
+    volumes:
+      - .:/var/www/html
     depends_on:
-      - db
+      - laravel-db
     environment:
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_DATABASE=news_aggregator_db
-      - DB_USERNAME=root
-      - DB_PASSWORD=root
+      DB_CONNECTION: mysql
+      DB_HOST: laravel-db
+      DB_PORT: 3306
+      DB_DATABASE: news_aggregator_db
+      DB_USERNAME: root
+      DB_PASSWORD: root
 
-  # Database container (MySQL)
-  db:
+  laravel-db:
     image: mysql:8.0
     container_name: laravel-db
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: news_aggregator_db
-    volumes:
-      - db_data:/var/lib/mysql
+      MYSQL_ROOT_PASSWORD: root  # Only root password
+      MYSQL_DATABASE: news_aggregator_db  # The database name
     networks:
       - laravel_network
-
-volumes:
-  db_data:
+    volumes:
+      - db_data:/var/lib/mysql
 
 networks:
   laravel_network:
     driver: bridge
+
+volumes:
+  db_data:

@@ -11,8 +11,8 @@ class ArticleValidation
     public static function articleValidation(Request $request) {
         $rules = [
             'date' => ['date','nullable','date_format:Y-m-d'],
-            'category' => ['string', 'nullable','in:business,entertainment,health,science,sports,technology,general'],
-            'source' => ['string', 'nullable'],
+            'category' => ['string', 'nullable','in:Business,Entertainment,Health,Science,Sports,Technology,General'],
+            'source' => ['string', 'nullable','in:NewsAPI,New York Times,The Guardian'],
             'keyword' => ['string','nullable']          
         ];
         
