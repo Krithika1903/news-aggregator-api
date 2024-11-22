@@ -146,15 +146,12 @@ class UserPreferenceController extends Controller
             $authors = UserAuthorPreferences::getData(['user_id' => $userId])->pluck('author');
 
             // Ensure categories and sources are not empty before passing to the query
-            if ($categories->isEmpty() && $sources->isEmpty() && $authors->isEmpty()) {
-                return response([
-                    'error' => true,
-                    'message' => 'No categories or sources or authors found for this user.'
-                ], 400);
+            if (empty($categories) && empty($sources) && empty($authors)) {
+                $newsArticles = NewsArticles::getArticles([], 10);
+            } else {
+                // Fetch personalized news feed based on user preferences
+                $newsArticles = NewsArticles::getNewsFeed($categories, $sources, $authors);
             }
-
-            // Fetch personalized news feed based on user preferences
-            $newsArticles = NewsArticles::getNewsFeed($categories, $sources, $authors);
 
              // Check if there are no news articles
             if ($newsArticles->isEmpty()) {

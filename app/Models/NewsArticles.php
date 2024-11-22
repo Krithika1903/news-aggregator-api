@@ -32,9 +32,11 @@ class NewsArticles extends Model
         // Apply filters based on the request parameters
         if (isset($filters['keyword'])) {
             $result = $result->where(function($query) use ($filters) {
-                // Use the index on 'title' and 'description' for keyword search
+                // Use the index on 'title', 'description', 'author', and 'source' for keyword search
                 $query->where('title', 'like', '%' . $filters['keyword'] . '%')
-                      ->orWhere('description', 'like', '%' . $filters['keyword'] . '%');
+                      ->orWhere('description', 'like', '%' . $filters['keyword'] . '%')
+                      ->orWhere('author', 'like', '%' . $filters['keyword'] . '%') // Added 'author' field search
+                      ->orWhere('source', 'like', '%' . $filters['keyword'] . '%'); // Added 'source' field search
             });
         }
         
